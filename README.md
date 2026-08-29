@@ -1,4 +1,4 @@
-# E-Commerce Sales & Customer Analytics
+# E-Commerce Analytics
 
 An end-to-end data analysis project covering data cleaning, exploratory analysis, SQL querying, and an interactive Power BI dashboard.
 
@@ -68,10 +68,6 @@ Three-page interactive dashboard, all pages sharing filters for **Year**, **Quar
 - (Python) The shipping address **"533 Main St"** appears most frequently (8 orders).
 - (Python) Order status breakdown: 250 cancelled, 247 returned, 237 pending, 468 shipped/delivered (the last group counted toward revenue).
 - (Python) A number of high `TotalPrice` outliers overlap with cancelled/returned orders — representing a notable revenue loss.
-
-## Year-over-year comparison (in progress)
-
-The dashboard has Year/Quarter filters built in specifically to explore how these insights shift across time periods — this analysis is still in progress and will be added here once complete.
 
 ## Recommendations
 
