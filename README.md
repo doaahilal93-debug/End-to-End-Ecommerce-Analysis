@@ -8,6 +8,7 @@ The dataset (1,200 order records) is a **synthetic/practice dataset used for por
 
 ## Pipeline Diagram
 
+```
 Excel (raw data, 1200 rows)
       ↓
 Python / pandas — cleaning, validation, exploratory analysis
@@ -15,6 +16,7 @@ Python / pandas — cleaning, validation, exploratory analysis
 SQL Server — deeper querying and aggregation
       ↓
 Power BI — Power Query (Date table), DAX measures, interactive dashboard
+```
 
 ## Data Model
 
