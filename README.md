@@ -8,15 +8,11 @@ The dataset (1,200 order records) is a **synthetic/practice dataset used for por
 
 ## Pipeline
 
-```
-Excel (raw data, 1200 rows)
-      ↓
-Python / pandas — cleaning, validation, exploratory analysis
-      ↓
-SQL Server — deeper querying and aggregation
-      ↓
-Power BI — Power Query (Date table), DAX measures, interactive dashboard
-```
+![image](Pipline_Diagram.png)
+
+## Data Model
+
+![image](4.png)
 
 ## Data cleaning (Python)
 
@@ -40,6 +36,8 @@ Three-page interactive dashboard, all pages sharing filters for **Year**, **Quar
 - Bar chart: order count by product
 - Bar chart: revenue by payment method
 
+![image](1.png)
+
 **Page 2 — Customers**
 - KPI cards: Total Customers, Avg Orders per Customer, Units Sold
 - Bar chart: customer count by referral source (Instagram, Email, Google, Facebook, Referral)
@@ -47,12 +45,16 @@ Three-page interactive dashboard, all pages sharing filters for **Year**, **Quar
 - Bar chart: order count by order status (Cancelled, Returned, Pending, Shipped, Delivered)
 - Bar chart: revenue by coupon code
 
+![image](2.png)
+
 **Page 3 — Order Issues**
 - KPI cards: Cancellation Rate, Return Rate, Pending Rate
 - Bar chart: return rate by coupon code
 - Map: cancellation rate by shipping address (US)
 - Bar chart: pending rate by payment method
 - Bar chart: return rate by product
+
+![image](3.png)
 
 ## Key insights
 
