@@ -6,9 +6,15 @@ An end-to-end data analysis project covering data cleaning, exploratory analysis
 
 The dataset (1,200 order records) is a **synthetic/practice dataset used for portfolio purposes — not real company data.** Any business conclusions below describe patterns *within this sample* and should not be read as findings about an actual business.
 
-## Pipeline
+## Pipeline Diagram
 
-### ![image](Pipline_Diagram.png)
+Excel (raw data, 1200 rows)
+      ↓
+Python / pandas — cleaning, validation, exploratory analysis
+      ↓
+SQL Server — deeper querying and aggregation
+      ↓
+Power BI — Power Query (Date table), DAX measures, interactive dashboard
 
 ## Data Model
 
