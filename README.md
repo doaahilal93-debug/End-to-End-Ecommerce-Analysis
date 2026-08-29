@@ -1,244 +1,92 @@
-# E-commerce Sales Analysis
+# E-Commerce Sales & Customer Analytics
 
-## Project Overview
-This project was completed as part of the Decodelabs Internship task.
-The goal was to analyze e-commerce order data and turn raw data into meaningful business insights using Python, SQL, and Power BI.
-The analysis covers sales, customers, products, orders, payment methods, coupons, referral sources, cancellations, and returns.
+An end-to-end data analysis project covering data cleaning, exploratory analysis, SQL querying, and an interactive Power BI dashboard.
 
-## Dataset
-The dataset contains:
-- 1,200 orders
-- 1,189 unique customers
+## Data source & disclaimer
 
-### Main Columns
-`OrderID` · `OrderDate` · `CustomerID` · `Product` · `Quantity` · `UnitPrice` · `TotalPrice` · `ItemsInCart` · `PaymentMethod` · `OrderStatus` · `CouponCode` · `ReferralSource`
+The dataset (1,200 order records) is a **synthetic/practice dataset used for portfolio purposes — not real company data.** Any business conclusions below describe patterns *within this sample* and should not be read as findings about an actual business.
 
----
-
-## 1. Python – Data Cleaning & Exploratory Analysis
-Python was used to understand the dataset, check data quality, and prepare the data for further analysis.
-
-### Data Inspection
-python
-df.info()
-df.describe()
-
-These checks were used to review data types, dataset structure, basic statistics, and numeric distributions.
-
-### Data Quality Checks
-
-Missing values were checked using:
-
-python
-df.isna().sum()
-
-Missing CouponCode values were replaced with a meaningful category:
-
-python
-df['CouponCode'] = df['CouponCode'].fillna('No Coupon')
-
-Duplicate rows were checked using:
-
-python
-df.duplicated().sum()
-
-Categorical columns were also reviewed using `value_counts()`.
-
-### Statistical Analysis
-
-Calculated:
-
-* Range
-* Q1
-* Median
-* Q3
-* IQR
-* Lower and Upper Bounds
-
-Potential outliers were identified using the 1.5 × IQR rule.
-
-### Visualization
-
-Created boxplots for:
-
-* Quantity
-* UnitPrice
-* ItemsInCart
-* TotalPrice
-
-### Export
-
-The cleaned dataset was exported for SQL analysis:
-
-```python
-df.to_csv('cleaned_data.csv', index=False)
+## Pipeline
 
 ```
+Excel (raw data, 1200 rows)
+      ↓
+Python / pandas — cleaning, validation, exploratory analysis
+      ↓
+SQL Server — deeper querying and aggregation
+      ↓
+Power BI — Power Query (Date table), DAX measures, interactive dashboard
+```
 
----
+## Data cleaning (Python)
 
-## 2. SQL – Business Analysis
+- Verified `OrderID` uniqueness and checked for duplicate rows — none found.
+- Checked for missing values across all columns; only `CouponCode` had nulls, which were replaced with `"No Coupon"`.
+- Inspected `Quantity`, `UnitPrice`, `ItemsInCart`, and `TotalPrice` for outliers via boxplots.
+- Flagged high-value `TotalPrice` outliers for review rather than removing them outright (see Notes & limitations below).
+- Exported the cleaned dataset for SQL analysis.
 
-SQL was used to validate the data, answer business questions, and calculate key metrics.
+## Deeper analysis (SQL Server)
 
-### Customer Analysis
+Queries covered: order uniqueness, total/unique customers, orders per customer, units sold per product, orders per product, orders per payment method, top cancelled/returned product, customers by referral source, Gross Revenue, Net Revenue, AOV, Cancellation Rate, and cancellation/return counts per customer.
 
-* Total unique customers
-* Orders per customer
-* Cancelled orders per customer
-* Returned orders per customer
+## Dashboard (Power BI)
 
-### Product Analysis
+Three-page interactive dashboard, all pages sharing filters for **Year**, **Quarter**, **Month**, and **Payment Method**. Built with a separate Date table (created in Power Query) and custom DAX measures for revenue, AOV, and cancellation/return/pending rates.
 
-* Units sold by product
-* Orders by product
-* Most cancelled products
-* Most returned products
+**Page 1 — Sales**
+- KPI cards: Gross Revenue, Net Revenue, AOV, Total Orders
+- Line chart comparing Gross vs. Net revenue trend across all 12 months
+- Bar chart: order count by product
+- Bar chart: revenue by payment method
 
-### Payment & Marketing Analysis
+**Page 2 — Customers**
+- KPI cards: Total Customers, Avg Orders per Customer, Units Sold
+- Bar chart: customer count by referral source (Instagram, Email, Google, Facebook, Referral)
+- Bar chart: products purchased by the most distinct customers
+- Bar chart: order count by order status (Cancelled, Returned, Pending, Shipped, Delivered)
+- Bar chart: revenue by coupon code
 
-* Orders by payment method
-* Customers by referral source
-* Coupon performance
+**Page 3 — Order Issues**
+- KPI cards: Cancellation Rate, Return Rate, Pending Rate
+- Bar chart: return rate by coupon code
+- Map: cancellation rate by shipping address (US)
+- Bar chart: pending rate by payment method
+- Bar chart: return rate by product
 
-### Sales Metrics
+## Key insights
 
-* **Gross Revenue:** Total TotalPrice across all orders.
-* **Revenue:** Revenue from Shipped and Delivered orders in the final Power BI dashboard.
-* **Average Order Value (AOV):** Average value of completed orders.
-* **Cancellation Rate:** Percentage of orders with Cancelled status.
+- `OrderID` is unique across all 1,200 rows; the dataset covers **1,189 unique customers**.
+- **Printer** has the most orders overall; **Chair** is most often ordered in larger quantities per cart.
+- **Phone** is the lowest performer on both orders and quantity.
+- **Online** payment brings in the most revenue and is the most used method; **Credit Card** brings in the least.
+- No single customer repeatedly cancels or returns orders — cancellations/returns are spread across the customer base.
+- **Tablet** has the highest return rate; **Chair** has the highest cancellation rate.
+- **June** is the strongest month for both revenue and order volume; **September** and **August** are the weakest.
+- **SAVE10** and **FREESHIP** generate the most revenue among coupon codes; **No Coupon** and **WINTER15** trail behind.
+- **August** and **April** see the most cancellations; **September** and **December** see the fewest.
+- (Python) The shipping address **"533 Main St"** appears most frequently (8 orders).
+- (Python) Order status breakdown: 250 cancelled, 247 returned, 237 pending, 468 shipped/delivered (the last group counted toward revenue).
+- (Python) A number of high `TotalPrice` outliers overlap with cancelled/returned orders — representing a notable revenue loss.
 
----
+## Year-over-year comparison (in progress)
 
-## 3. Power BI – Data Modeling & Dashboard
+The dashboard has Year/Quarter filters built in specifically to explore how these insights shift across time periods — this analysis is still in progress and will be added here once complete.
 
-Power BI was used to create the final interactive dashboard.
+## Recommendations
 
-### Data Model
+*(Framed as if this were real business data — for demonstration of analytical thinking.)*
 
-The main sales table was kept as one table because the dataset is relatively small.
-A separate Date table was created for time-based analysis:
+- Review **Credit Card** as a payment option — lowest revenue contribution despite being offered — investigate fees or friction in that checkout path.
+- Investigate **Tablet** quality/description accuracy given the highest return rate.
+- Investigate **Chair** listing/fulfillment given the highest cancellation rate.
+- Use the **August/April cancellation spike** as a starting point to check for seasonal, shipping, or promotional causes in those months.
 
-* Date
-* Year
-* Quarter
-* Month
-* Month Number
+## Notes & limitations
 
-The Date table was connected to the Sales table using a 1-to-many relationship.
+- High `TotalPrice` outliers were validated by checking `Quantity × UnitPrice` against `TotalPrice` rather than removed — they appear to be legitimate large orders, not data-entry errors.
+- Dataset origin is a practice/sample source, not verified real-world transaction data (see disclaimer above).
 
-### Key Measures
+## Tools
 
-* Gross Revenue
-* Revenue
-* AOV
-* Total Orders
-* Total Customers
-* Units Sold
-* Cancellation Rate
-* Return Rate
-* Pending Rate
-* Average Orders per Customer
-
-### Dashboard Pages
-
-#### Data Model
-
-![image](4.png)
-
-#### Sales
-
-![image](1.png)
-
-Focuses on overall sales performance.
-**KPIs**
-
-* Gross Revenue
-* Revenue
-* AOV
-* Total Orders
-
-**Visualizations**
-
-* Revenue Trend
-* Orders by Product
-* Revenue by Payment Method
-* Revenue by Coupon Code
-
-#### Customers
-
-![image](2.png)
-
-Focuses on customer behavior and acquisition.
-**KPIs**
-
-* Total Customers
-* Average Orders per Customer
-* Units Sold
-
-**Visualizations**
-
-* Customers by Referral Source
-* Unique Customers by Product
-* Orders by Order Status
-
-#### Order Issues
-
-![image](3.png)
-
-Focuses on cancellations, returns, and pending orders.
-**KPIs**
-
-* Cancellation Rate
-* Return Rate
-* Pending Rate
-
-**Visualizations**
-
-* Cancellation Rate Trend
-* Cancellation Rate by Product
-* Return Rate by Product
-
----
-
-## Key Insights
-
-### 1. High Cancellation Rate
-
-The cancellation rate is 20.83%, meaning approximately 1 in every 5 orders was cancelled.
-This makes cancellations an important area for further investigation, especially for products with high cancellation rates.
-
-### 2. Low Repeat Purchasing
-
-The dataset contains 1,189 customers and 1,200 orders, resulting in an average of 1.01 orders per customer.
-This indicates that most customers placed only one order and highlights an opportunity to improve repeat purchases and retention.
-
-### 3. Gap Between Gross Revenue and Realized Revenue
-
-Gross Revenue is approximately 1.26M, while Revenue from shipped and delivered orders is approximately 489K.
-This highlights the importance of monitoring cancelled, returned, and pending orders to understand the gap between recorded order value and realized revenue.
-
----
-
-## Business Recommendations
-
-* Investigate the main reasons behind cancellations and returns.
-* Review products with unusually high cancellation or return rates.
-* Develop strategies to encourage repeat purchases and improve customer retention.
-* Monitor cancelled, returned, and pending orders to better understand realized revenue.
-
----
-
-## Skills Demonstrated
-
-* **Python:** Pandas, NumPy, Matplotlib, Seaborn
-* **Data Analysis:** Data cleaning, EDA, descriptive statistics, IQR and outlier analysis
-* **SQL:** Filtering, aggregation, GROUP BY, COUNT, SUM, AVG, DISTINCT, CASE
-* **Power BI:** Data modeling, DAX, KPI development, interactive dashboards
-* **Business Analysis:** KPI selection, business questions, insights, and recommendations
-
----
-
-## Project Workflow
-
-> Raw Data → Python Cleaning & EDA → SQL Business Analysis → Power BI Dashboard → Business Insights
+Python (pandas, matplotlib), SQL Server, Power BI (Power Query, DAX).
