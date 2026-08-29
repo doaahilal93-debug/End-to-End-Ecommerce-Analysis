@@ -8,7 +8,7 @@ The dataset (1,200 order records) is a **synthetic/practice dataset used for por
 
 ## Pipeline
 
-![image](Pipline_Diagram.png)
+### ![image](Pipline_Diagram.png)
 
 ## Data Model
 
