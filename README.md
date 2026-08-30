@@ -18,10 +18,6 @@ SQL Server — deeper querying and aggregation
 Power BI — Power Query (Date table), DAX measures, interactive dashboard
 ```
 
-## Data Model
-
-![image](4.png)
-
 ## Data cleaning (Python)
 
 - Verified `OrderID` uniqueness and checked for duplicate rows — none found.
@@ -37,6 +33,10 @@ Queries covered: order uniqueness, total/unique customers, orders per customer, 
 ## Dashboard (Power BI)
 
 Three-page interactive dashboard, all pages sharing filters for **Year**, **Quarter**, **Month**, and **Payment Method**. Built with a separate Date table (created in Power Query) and custom DAX measures for revenue, AOV, and cancellation/return/pending rates.
+
+## Data Model
+
+![image](4.png)
 
 **Page 1 — Sales**
 - KPI cards: Gross Revenue, Net Revenue, AOV, Total Orders
